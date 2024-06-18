@@ -54,10 +54,10 @@
     <div class="container">
 <h2>Restablecer Contraseña</h2>
     <form action="./Verificartoken.php" method="post">
-    <label for="codigo">email:</label>
-    <input type="text" name="email">
+    <label for="email">email:</label>
+    <input type="email" name="email">
         <label for="codigo">codigo:</label>
-        <input type="codigo" id="codigo" name="token" required>
+        <input type="codigo" id="codigo" name="codigo" required>
         <button type="submit">restablecer</button>
     </form>
     </div>

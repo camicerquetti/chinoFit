@@ -3,23 +3,27 @@ include("./conexion.php");
 date_default_timezone_set('America/Buenos_Aires'); // Establecer la zona horaria
 
 $email = $_POST["email"];
-$token = $_POST["token"];
+$codigo = $_POST["codigo"];
 
-$query = "SELECT * FROM password WHERE email='$email' AND token='$token'";
+
+$query = "SELECT * FROM password WHERE email='$email' AND codigo='$codigo'";
 $resultado = $conexion->query($query);
 
 $correcto = false;
 
 if($resultado->num_rows > 0) {
     $fila = $resultado->fetch_assoc();
-    $creation_time = strtotime($fila['fecha']); // Cambio aquí
+    $creation_time = strtotime($fila['fecha']); 
     $current_time = time();
     $difference = $current_time - $creation_time; // Calcula la diferencia de tiempo en segundos
+$fecha_bd = $fila['fecha']; // Obtener la fecha de la base de datos
+$creation_time = strtotime($fecha_bd); // Convertir la fecha a un timestamp
 
     if ($difference <= 600) { // Verifica si la diferencia está dentro de los 10 minutos
         $correcto = true;
     } 
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -78,12 +82,14 @@ if($resultado->num_rows > 0) {
       <h2>Restablecer Contraseña</h2>
       <?php if ($correcto == true){ ?>
         <form action="./cambiar.php" method="post">
-          <label for="email">Email:</label>
-          <input type="text" name="email" value="<?php echo $email; ?>" readonly>
-          <label for="nueva_contasena">Nueva contraseña:</label>
-          <input type="password" id="nueva_contrasena" name="nueva_contrasena" required>
-          <button type="submit">Restablecer</button>
-        </form>
+    <label for="password">Nuevo password:</label>
+    <input type="password" id="password" name="password" required>
+    <label for="confirm_password">Confirmar nuevo password:</label>
+    <input type="password" id="confirm_password" name="confirm_password" required>
+    <input type="text" name="email" value="<?php echo $email; ?>" readonly>
+    <button type="submit">Restablecer</button>
+</form>
+
       <?php } else { ?>
         <div class="alert alert-danger">Código vencido o incorrecto</div>
       <?php } ?>
